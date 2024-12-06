@@ -11,10 +11,13 @@ import UIKit
 extension CropView {
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let newPoint = convert(point, to: self)
-        
+
         if let rotationControlView = rotationControlView, rotationControlView.frame.contains(newPoint) {
-            let pointInRotationControlView = rotationControlView.convert(newPoint, from: self)
-            return rotationControlView.getTouchTarget(with: pointInRotationControlView)
+            if newPoint.y >= rotationControlView.frame.minY + 24
+                || (newPoint.x <= rotationControlView.frame.midX - 12 && newPoint.x >= rotationControlView.frame.midX + 12) {
+                let pointInRotationControlView = rotationControlView.convert(newPoint, from: self)
+                return rotationControlView.getTouchTarget(with: pointInRotationControlView)
+            }
         }
         
         if !cropViewConfig.cropAuxiliaryIndicatorConfig.disableCropBoxDeformation && isHitGridOverlayView(by: newPoint) {
